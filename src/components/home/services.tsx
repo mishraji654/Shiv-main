@@ -1,0 +1,197 @@
+"use client";
+
+import { useState } from "react";
+import { ArrowRight, ArrowUpRight, Stethoscope } from "lucide-react";
+import { SYMPTOMS, TREATMENTS } from "@/lib/site-data";
+import { useNav } from "@/lib/nav";
+import {
+  Reveal,
+  SectionHeading,
+  StaggerGrid,
+  StaggerItem,
+} from "@/components/site/reveal";
+
+export function Services() {
+  const nav = useNav();
+  return (
+    <section className="relative overflow-hidden bg-mist py-16 sm:py-20 lg:py-24" aria-labelledby="services-heading">
+      <div className="container-x">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <SectionHeading
+            align="left"
+            eyebrow="Our Services"
+            title={
+              <span id="services-heading">
+                Comprehensive Eye Care <span className="text-gradient">Under One Roof</span>
+              </span>
+            }
+            description="From routine examinations to advanced surgical care — every service follows the same standard of detailed diagnosis and honest counselling."
+          />
+          <Reveal delay={0.1} className="shrink-0 w-full sm:w-auto">
+            <button
+              onClick={() => nav.navigate({ view: "treatments" })}
+              className="group inline-flex w-full sm:w-auto justify-center items-center gap-2 rounded-full border border-jade-200 bg-white px-6 py-3.5 text-sm font-bold text-brand-900 shadow-soft transition hover:border-jade-300 hover:bg-jade-50"
+            >
+              View All Treatments
+              <ArrowRight className="h-4 w-4 text-jade-600 transition-transform group-hover:translate-x-1" />
+            </button>
+          </Reveal>
+        </div>
+
+        <StaggerGrid className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {TREATMENTS.map((t) => (
+            <StaggerItem key={t.id}>
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={() => nav.navigate({ view: "treatment", treatmentId: t.id })}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    nav.navigate({ view: "treatment", treatmentId: t.id });
+                  }
+                }}
+                className="group flex h-full w-full cursor-pointer flex-col overflow-hidden rounded-3xl border border-border/60 bg-white text-left shadow-soft transition-all duration-300 hover:-translate-y-1.5 hover:border-jade-300 hover:shadow-lift focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jade-500"
+                aria-label={`Learn about ${t.name}`}
+              >
+                <span className="relative block h-44 overflow-hidden">
+                  {t.image ? (
+                    <img
+                      src={t.image}
+                      alt={t.name}
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  ) : (
+                    <span className={`block h-full w-full bg-gradient-to-br ${t.gradient}`} />
+                  )}
+                  <span
+                    className="absolute inset-0 bg-gradient-to-t from-brand-950/40 via-brand-950/5 to-transparent"
+                    aria-hidden="true"
+                  />
+                </span>
+                <span className="flex flex-1 flex-col p-5">
+                  <h3 className="text-lg font-extrabold tracking-tight text-brand-900">
+                    {t.shortName}
+                  </h3>
+                  <p className="mt-1.5 text-xs font-semibold leading-relaxed text-jade-800">
+                    {t.whatItProvides}
+                  </p>
+                  {t.clinicalFocus && t.clinicalFocus.length > 0 && (
+                    <ul className="mt-3 flex-1 space-y-1 text-[0.75rem] text-ink-600 border-t border-border/50 pt-2.5">
+                      {t.clinicalFocus.slice(0, 2).map((cf) => (
+                        <li key={cf} className="flex items-center gap-1.5">
+                          <span className="h-1.5 w-1.5 rounded-full bg-gold-500 shrink-0" />
+                          <span className="line-clamp-1">{cf}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-jade-700">
+                    Explore Clinical Focus
+                    <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </span>
+                </span>
+              </div>
+            </StaggerItem>
+          ))}
+        </StaggerGrid>
+      </div>
+    </section>
+  );
+}
+
+export function FindCare() {
+  const nav = useNav();
+  const [tab, setTab] = useState<"symptoms" | "treatments">("symptoms");
+
+  return (
+    <section className="py-16 sm:py-20 lg:py-24" aria-labelledby="findcare-heading">
+      <div className="container-x">
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-brand-900 via-brand-800 to-jade-800 shadow-lift">
+          {/* decorative rings */}
+          <svg
+            className="pointer-events-none absolute -left-24 -top-24 h-80 w-80 opacity-20"
+            viewBox="0 0 200 200"
+            aria-hidden="true"
+          >
+            {[40, 70, 100].map((r) => (
+              <circle key={r} cx="100" cy="100" r={r} fill="none" stroke="#FDE174" strokeWidth="0.8" strokeDasharray="2 8" />
+            ))}
+          </svg>
+          <div className="relative p-5 sm:p-12 lg:p-16">
+            <div className="max-w-2xl">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.14em] text-jade-200">
+                Find the Right Eye Care
+              </span>
+              <h2
+                id="findcare-heading"
+                className="mt-5 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white"
+              >
+                What are you looking for?
+              </h2>
+              <p className="mt-3 text-sm sm:text-base leading-relaxed text-jade-100/85">
+                You don&apos;t need to know the medical terms — tell us what you
+                are experiencing, or simply browse by treatment.
+              </p>
+            </div>
+
+            {/* tabs */}
+            <div className="mt-8 flex flex-col sm:inline-flex sm:flex-row gap-1.5 rounded-3xl sm:rounded-full border border-white/15 bg-white/10 p-1.5" role="tablist" aria-label="Browse mode">
+              {(
+                [
+                  { id: "symptoms", label: "I have a vision problem" },
+                  { id: "treatments", label: "Explore by treatment" },
+                ] as const
+              ).map((t) => (
+                <button
+                  key={t.id}
+                  role="tab"
+                  aria-selected={tab === t.id}
+                  onClick={() => setTab(t.id)}
+                  className={`rounded-full px-5 py-2.5 text-sm font-bold transition text-center ${
+                    tab === t.id
+                      ? "bg-white text-brand-900 shadow-soft"
+                      : "text-jade-100 hover:text-white"
+                  }`}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+
+            {/* chips */}
+            <div className="mt-7 flex flex-wrap gap-2 sm:gap-3" role="tabpanel">
+              {tab === "symptoms"
+                ? SYMPTOMS.map((s) => (
+                    <button
+                      key={s.label}
+                      onClick={() => nav.navigate({ view: "treatment", treatmentId: s.treatmentId })}
+                      className="group inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-2 sm:px-5 sm:py-3 text-xs sm:text-sm font-semibold text-jade-50 transition hover:border-jade-300/50 hover:bg-white/15"
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-jade-300 transition group-hover:bg-white" />
+                      {s.label}
+                    </button>
+                  ))
+                : TREATMENTS.map((t) => (
+                    <button
+                      key={t.id}
+                      onClick={() => nav.navigate({ view: "treatment", treatmentId: t.id })}
+                      className="group inline-flex items-center gap-2 sm:gap-2.5 rounded-full border border-white/15 bg-white/5 px-3.5 py-2 sm:px-5 sm:py-3 text-xs sm:text-sm font-semibold text-jade-50 transition hover:border-jade-300/50 hover:bg-white/15"
+                    >
+                      <t.icon className="h-4 w-4 text-jade-300 transition group-hover:text-white" />
+                      {t.shortName}
+                    </button>
+                  ))}
+            </div>
+
+            <p className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-jade-200/80">
+              <Stethoscope className="h-4 w-4" />
+              Not sure? Start with a Comprehensive Eye Exam — we will guide you from there.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
